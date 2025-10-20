@@ -30,5 +30,8 @@ jobs:
           pip install wheel setuptools
           pip install -r requirements.txt
 
+      - name: Verify ta installed
+        run: pip show ta
+
       - name: Run ETF daily check
         run: python src/main.py
