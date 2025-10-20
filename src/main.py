@@ -35,7 +35,7 @@ def analyze_etf(ticker):
     """分析单个 ETF，返回买入信号或 None"""
     try:
         # 下载过去1年数据
-        data = yf.download(ticker, period="1y", progress=False)
+        data = yf.download(ticker, period="1y", progress=False, auto_adjust=False)
 
         # 检查数据是否为空
         if data is None or data.empty:

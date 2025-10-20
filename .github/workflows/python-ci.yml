@@ -10,7 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      MY_WEBHOOK_URL: ${{ secrets.MY_WEBHOOK_URL }}  # ✅ Securely load secret
+      MY_WEBHOOK_URL: ${{ secrets.MY_WEBHOOK_URL }}
+      GMAIL_USER: ${{ secrets.GMAIL_USER }}
+      GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+      GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }} # ✅ Securely load secret
 
     steps:
       - name: Checkout repository
@@ -24,7 +27,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install yfinance pandas pandas_ta schedule requests
+          pip install wheel setuptools
+          pip install -r requirements.txt
 
       - name: Run ETF daily check
         run: python src/main.py
