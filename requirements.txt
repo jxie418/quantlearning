@@ -5,5 +5,5 @@ pandas_ta
 requests
 schedule
 matplotlib
-ta
+ta==0.10.2
 
