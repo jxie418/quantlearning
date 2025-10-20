@@ -28,6 +28,7 @@ var/
 venv/
 ENV/
 env/
+/src/results/
 env.bak/
 venv.bak/
 

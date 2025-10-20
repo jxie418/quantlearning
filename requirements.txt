@@ -4,4 +4,6 @@ pandas
 pandas_ta
 requests
 schedule
+matplotlib
+ta
 
