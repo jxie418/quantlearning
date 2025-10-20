@@ -13,7 +13,10 @@ if not SLACK_WEBHOOK_URL:
     raise ValueError("❌ Environment variable MY_WEBHOOK_URL not set! Please configure it in GitHub Secrets.")
 
 # ===== ETF 列表 =====
-ETF_LIST = ["VOO", "QQQ", "SPY", "IWM", "XLK"]
+ETF_LIST = ["VOO", "SPY", "VTI", "ARKK", "AAPL", "MSFT", "GOOG", "TSLA",
+            "DXCM", "NVDA", "AXP", "ISRG", "COST", "ASML", "AMZN", "META",
+            "QQQ", "QQQM", "SCHD", "UNH", "AMD", "TSM", "JPM", "DIS", "T",
+             "PYPL", "TDOC"]
 
 def analyze_etf(ticker):
     """分析单个 ETF，返回买入信号或 None"""
@@ -104,9 +107,19 @@ def daily_check():
 
 
 # ===== 每天上午 09:00 运行 =====
-schedule.every().day.at("16:25").do(daily_check)
+# schedule.every().day.at("16:25").do(daily_check)
+#
+# print("🔁 ETF buy signal monitor started...")
+# while True:
+#     schedule.run_pending()
+#     time.sleep(60)
 
-print("🔁 ETF buy signal monitor started...")
-while True:
-    schedule.run_pending()
-    time.sleep(60)
+def main():
+    """Main entry point of the program."""
+    print("🚀 Starting daily check process...")
+    daily_check()
+    print("✅ Daily check completed successfully!")
+
+
+if __name__ == "__main__":
+    main()
