@@ -3,7 +3,7 @@ name: Python ETF Strategy
 on:
   workflow_dispatch:   # Manual trigger
   schedule:
-    - cron: "00 13 * * *"  # Every day at 13:00 UTC (adjust for your timezone)
+    - cron: "00 14 * * *"  # Every day at 14:00 UTC (adjust for your timezone)
 
 jobs:
   run-etf-check:
