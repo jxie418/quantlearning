@@ -29,7 +29,7 @@ if not SLACK_WEBHOOK_URL:
 ETF_LIST = ["VOO", "SPY", "VTI", "ARKK", "AAPL", "MSFT", "GOOG", "TSLA",
             "DXCM", "NVDA", "AXP", "ISRG", "COST", "ASML", "AMZN", "META",
             "QQQ", "QQQM", "SCHD", "UNH", "AMD", "TSM", "JPM", "DIS", "T",
-             "PYPL", "TDOC"]
+            "PYPL", "TDOC", "QCOM", "MA", "V", "HD", "ORCL", "VWO", "LMT", "WCP"]
 
 def analyze_etf(ticker):
     """Analyze a single ETF and return a buy signal dict or None."""
