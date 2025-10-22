@@ -29,6 +29,7 @@ venv/
 ENV/
 env/
 /src/results/
+/src/sec_data/
 env.bak/
 venv.bak/
 

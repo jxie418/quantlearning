@@ -8,4 +8,7 @@ requests
 schedule
 pytest
 ta==0.11.0
+sec-edgar-downloader
+beautifulsoup4
+lxml
 
