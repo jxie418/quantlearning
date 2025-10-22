@@ -32,54 +32,43 @@ ETF_LIST = ["VOO", "SPY", "VTI", "ARKK", "AAPL", "MSFT", "GOOG", "TSLA",
              "PYPL", "TDOC"]
 
 def analyze_etf(ticker):
-    """分析单个 ETF，返回买入信号或 None"""
+    """Analyze a single ETF and return a buy signal dict or None."""
     try:
-        # 下载过去1年数据
+        # download 1 year of data
         data = yf.download(ticker, period="1y", progress=False, auto_adjust=False)
 
-        # 检查数据是否为空
         if data is None or data.empty:
             print(f"No data for {ticker}")
             return None
 
-        # 计算 RSI
-        data["RSI"] = pta.rsi(data["Close"], length=14)
+        # compute indicators using the shared compute_indicators (returns columns: Close, RSI, MACD, MACD_signal, MACD_diff, MA200)
+        ind = compute_indicators(data)
 
-        # 计算 MACD
-        macd_df = pta.macd(data["Close"])
-        if macd_df is None or macd_df.empty:
-            print(f"MACD not computed for {ticker}")
+        # need at least two rows to detect a cross
+        if len(ind) < 2:
             return None
 
-        # 合并 MACD 数据
-        data = pd.concat([data, macd_df], axis=1)
+        today = ind.iloc[-1]
+        yesterday = ind.iloc[-2]
 
-        # 检查最后两天是否足够
-        if len(data) < 2:
+        # ensure required values are present
+        if pd.isna(today["RSI"]) or pd.isna(today["MACD"]) or pd.isna(today["MACD_signal"]):
             return None
 
-        today = data.iloc[-1]
-        yesterday = data.iloc[-2]
-
-        # 检查数据完整性
-        if pd.isna(today["RSI"]) or pd.isna(today["MACD_12_26_9"]) or pd.isna(today["MACDs_12_26_9"]):
-            return None
-
-        # 策略逻辑
-        macd_cross = yesterday["MACD_12_26_9"] < yesterday["MACDs_12_26_9"] and today["MACD_12_26_9"] > today["MACDs_12_26_9"]
-        rsi_buy = today["RSI"] < 40
+        # strategy: MACD crosses above signal + RSI below threshold
+        macd_cross = (yesterday["MACD"] < yesterday["MACD_signal"]) and (today["MACD"] > today["MACD_signal"])
+        rsi_buy = today["RSI"] < RSI_BUY
 
         if macd_cross and rsi_buy:
             return {
                 "ticker": ticker,
-                "price": round(today["Close"], 2),
-                "rsi": round(today["RSI"], 2),
-                "macd": round(today["MACD_12_26_9"], 4),
-                "macd_signal": round(today["MACDs_12_26_9"], 4),
+                "price": round(float(today["Close"]), 2),
+                "rsi": round(float(today["RSI"]), 2),
+                "macd": round(float(today["MACD"]), 4),
+                "macd_signal": round(float(today["MACD_signal"]), 4),
                 "date": today.name.strftime("%Y-%m-%d")
             }
-        else:
-            return None
+        return None
 
     except Exception as e:
         print(f"Error analyzing {ticker}: {e}")
